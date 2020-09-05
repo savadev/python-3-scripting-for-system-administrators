@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import sys
 
 parser = argparse.ArgumentParser(description='Read a file in reverse')
 
@@ -18,6 +19,7 @@ try:
 	limit = args.limit
 except FileNotFoundError as err:
 	print("Error: " + str(err))
+	sys.exit(2)
 else: 
 	with f:
 		lines = f.readlines()
