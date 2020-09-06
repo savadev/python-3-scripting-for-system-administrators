@@ -17,7 +17,8 @@ with open('/usr/share/dict/words') as f:
 #	if snippet in word.lower():
 #		matches.append(word)
 
-matches = [word.strip() for word in words if snippet in word.lower()]
+#matches = [word.strip() for word in words if snippet in word.lower()]
+#print(matches)
 
-print(matches)
+print([word.strip() for word in words if snippet in word.lower()])
 
