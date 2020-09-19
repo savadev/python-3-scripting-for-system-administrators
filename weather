@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import os
+import requests
+import sys
+import time
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description='Get the current weather information for your zipcode')
+parser.add_argument('zip', help='zip/postal code to get the weather for')
+parser.add_argument('--country', default='us', help='country zip/postal code belongs to, default is "us"')
+parser.add_argument('--units', default='imperial', help='temperature units, default is "imperial"')
+
+args = parser.parse_args()
+
+api_key = os.getenv("OWM_API_KEY")
+if not api_key:
+    print("OMW_API_KEY environment variable not set")
+    sys.exit(1)
+
+url = "https://api.openweathermap.org/data/2.5/weather?zip=" + args.zip + "," + args.country + "&units=" + args.units + "&appid=" + api_key
+
+response = requests.get(url)
+
+if response.status_code != 200:
+    print("Error talking to weather provider: " + str(response.status_code))
+    sys.exit(1)
+
+print("Weather for " + response.json()['name'])
+print("Current temperature: " + str(response.json()['main']['temp']) + ", Feels like: " + str(response.json()['main']['feels_like']))
+print("Humidity: " + str(response.json()['main']['humidity']))
+print("High: " + str(response.json()['main']['temp_max']) + ", Low: " + str(response.json()['main']['temp_min']))
+print("Sunset: " + time.strftime('%I:%M:%S %p', time.localtime(response.json()['sys']['sunset'])))
+
