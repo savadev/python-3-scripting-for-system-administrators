@@ -24,7 +24,7 @@ def main():
     import boto3
     from pgbackup import pgdump, storage
 
-    args = create_parser().parser_args()
+    args = create_parser().parse_args()
     dump = pgdump.dump(args.url)
     if args.driver == 's3':
         client = boto3('s3')
