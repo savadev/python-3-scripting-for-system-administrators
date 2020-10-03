@@ -2,7 +2,7 @@ import pytest
 import subprocess
 from pgbackup import pgdump
 
-url = "postgres://bob:password@example.com:5432/deb_one"
+url = "postgres://bob:password@example.com:5432/db_one"
 
 def test_dump_calls_pg_dump(mocker):
     """
@@ -19,4 +19,17 @@ def test_dump_handles_oserror(mocker):
     mocker.patch('subprocess.Popen', side_effect=OSError('no such file'))
     with pytest.raises(SystemExit):
         pgdump.dump(url)
+
+def test_dump_file_name_without_timestamp():
+    """
+    pgdump.dump_file_name returns the name of the database
+    """
+    assert pgdump.dump_file_name(url) == "db_one.sql"
+
+def test_dump_file_name_with_timestamp():
+    """
+    pgdump.dump_file_name returns the name of the database with timestamp
+    """
+    timestamp = "2020-10-03T15:25:00"
+    assert pgdump.dump_file_name(url, timestamp) == "db_one-" + timestamp +  ".sql"
 
