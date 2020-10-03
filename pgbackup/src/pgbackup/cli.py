@@ -27,7 +27,7 @@ def main():
     args = create_parser().parse_args()
     dump = pgdump.dump(args.url)
     if args.driver == 's3':
-        client = boto3('s3')
+        client = boto3.cient('s3')
         storage.s3(client, dump.stdout, args.destination, 'example.sql')
     else:
         outfile = open(args.destination, 'wb')
